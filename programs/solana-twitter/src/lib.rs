@@ -27,7 +27,7 @@ pub mod solana_twitter {
 #[derive(Accounts)]
 #[instruction(topic: String, content: String)]
 pub struct SendTweet<'info> {
-    #[account(init, payer = author, space = 4 + 32 + 8 + 4 + topic.len() + 4 + content.len())]
+    #[account(init, payer = author, space = 8 + 32 + 8 + 4 + topic.len() + 4 + content.len())]
     pub tweet: Account<'info, Tweet>,
     #[account(mut)]
     pub author: Signer<'info>,
