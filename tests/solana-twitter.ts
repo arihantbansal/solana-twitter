@@ -65,10 +65,11 @@ describe("solana-twitter", () => {
 
 	it("can send a new tweet from a different author", async () => {
 		const otherUser = anchor.web3.Keypair.generate();
-		await program.provider.connection.requestAirdrop(
+		const signature = await program.provider.connection.requestAirdrop(
 			otherUser.publicKey,
 			1000000000
 		);
+		await program.provider.connection.confirmTransaction(signature);
 
 		const tweet = anchor.web3.Keypair.generate();
 		await program.rpc.sendTweet("solana", "maxi for life", {
