@@ -1,5 +1,5 @@
-import * as anchor from "@project-serum/anchor";
-import { Program } from "@project-serum/anchor";
+import * as anchor from "@coral-xyz/anchor";
+import { Program } from "@coral-xyz/anchor";
 import { SolanaTwitter } from "../target/types/solana_twitter";
 
 describe("solana-twitter", () => {
@@ -8,7 +8,7 @@ describe("solana-twitter", () => {
 
 	const program = anchor.workspace.SolanaTwitter as Program<SolanaTwitter>;
 	const tweet = anchor.web3.Keypair.generate();
-	const wallet = anchor.workspace.AnchorNftStaking.provider.wallet;
+	const wallet = anchor.workspace.SolanaTwitter.provider.wallet;
 
 	it("can send tweet!", async () => {
 		const tx = await program.methods
@@ -18,12 +18,14 @@ describe("solana-twitter", () => {
 			)
 			.accounts({
 				tweet: tweet.publicKey,
-				author: wallet,
+				author: wallet.publicKey,
 				systemProgram: anchor.web3.SystemProgram.programId,
 			})
-			.signers([tweet])
 			.rpc();
 		console.log("Your transaction signature", tx);
+
+		const tweetAccount = await program.account.tweet.fetch(tweet.publicKey);
+		console.log(tweetAccount);
 	});
 });
 
