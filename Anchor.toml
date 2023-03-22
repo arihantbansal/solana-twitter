@@ -1,14 +1,14 @@
 [features]
 seeds = false
 skip-lint = false
-[programs.localnet]
+[programs.devnet]
 solana_twitter = "HmgaDncYyDqmwT7axPykK9Gy5QFNB9pX3BBoNtwv3qjj"
 
 [registry]
 url = "https://api.apr.dev"
 
 [provider]
-cluster = "Localnet"
+cluster = "devnet"
 wallet = "/Users/arihantbansal/.config/solana/id.json"
 
 [scripts]

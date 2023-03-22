@@ -7,6 +7,9 @@ pub mod solana_twitter {
     use super::*;
 
     pub fn send_tweet(ctx: Context<SendTweet>, topic: String, content: String) -> Result<()> {
+        require!(topic.chars().count() <= 50, TweetError::TopicTooLong);
+        require!(content.chars().count() <= 280, TweetError::ContentTooLong);
+
         let tweet = &mut ctx.accounts.tweet;
         let author = &ctx.accounts.author;
 
@@ -41,8 +44,15 @@ pub struct Tweet {
 }
 
 impl Tweet {
-    const LEN: usize = 4 + 32 + 8 + 4 + (4 * 50) + 4 + (4 * 280);
     fn size(topic: String, content: String) -> usize {
         4 + 32 + 8 + 4 + topic.len() + 4 + content.len()
     }
+}
+
+#[error_code]
+pub enum TweetError {
+    #[msg("The provided topic length should be 50 characters long maximum")]
+    TopicTooLong,
+    #[msg("The provided content length should be 280 characters long maximum")]
+    ContentTooLong,
 }
