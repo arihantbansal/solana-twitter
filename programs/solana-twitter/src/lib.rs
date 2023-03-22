@@ -27,7 +27,7 @@ pub mod solana_twitter {
 #[derive(Accounts)]
 #[instruction(topic: String, content: String)]
 pub struct SendTweet<'info> {
-    #[account(init, payer = author, space = Tweet::size(topic, content))]
+    #[account(init, payer = author, space = 4 + 32 + 8 + 4 + topic.len() + 4 + content.len())]
     pub tweet: Account<'info, Tweet>,
     #[account(mut)]
     pub author: Signer<'info>,
@@ -41,12 +41,6 @@ pub struct Tweet {
     pub timestamp: i64,
     pub topic: String,
     pub content: String,
-}
-
-impl Tweet {
-    fn size(topic: String, content: String) -> usize {
-        4 + 32 + 8 + 4 + topic.len() + 4 + content.len()
-    }
 }
 
 #[error_code]
